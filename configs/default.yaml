@@ -1,0 +1,55 @@
+# Default configuration for pneumonia detection
+data:
+  data_dir: "data/chest_xray"
+  train_dir: "train"
+  val_dir: "val"
+  test_dir: "test"
+  image_size: [224, 224]
+  batch_size: 32
+  validation_split: 0.2
+  seed: 42
+  
+  # Data augmentation
+  rotation_range: 20
+  width_shift_range: 0.1
+  height_shift_range: 0.1
+  zoom_range: 0.1
+  horizontal_flip: true
+  vertical_flip: false
+
+model:
+  input_shape: [224, 224, 3]
+  num_classes: 2
+  dropout_rate: 0.5
+  l2_regularization: 0.001
+  
+  # Transfer learning
+  use_transfer_learning: true
+  base_model: "EfficientNetB0"  # Options: EfficientNetB0, ResNet50, VGG16, etc.
+  freeze_base: true
+  fine_tune_at: null
+
+training:
+  epochs: 50
+  learning_rate: 0.001
+  optimizer: "adam"
+  loss_function: "binary_crossentropy"
+  metrics: ["accuracy", "precision", "recall"]
+  
+  # Callbacks
+  early_stopping_patience: 10
+  reduce_lr_patience: 5
+  reduce_lr_factor: 0.2
+  min_lr: 0.0000001
+  
+  # Model saving
+  save_best_only: true
+  monitor: "val_accuracy"
+  mode: "max"
+
+experiment:
+  experiment_name: "pneumonia_detection"
+  run_name: null
+  tracking_uri: null
+  log_model: true
+  log_artifacts: true

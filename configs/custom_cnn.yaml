@@ -1,0 +1,19 @@
+# Configuration for custom CNN (similar to original model)
+data:
+  image_size: [150, 150]  # Original size
+  batch_size: 32
+
+model:
+  input_shape: [150, 150, 1]  # Grayscale
+  use_transfer_learning: false
+  dropout_rate: 0.2
+  l2_regularization: 0.001
+
+training:
+  epochs: 30
+  learning_rate: 0.001
+  optimizer: "rmsprop"  # Original optimizer
+
+experiment:
+  experiment_name: "pneumonia_custom_cnn"
+  run_name: "original_architecture_improved"

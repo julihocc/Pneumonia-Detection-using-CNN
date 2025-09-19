@@ -1,0 +1,84 @@
+# Docker Compose for local development
+version: '3.8'
+
+services:
+  pneumonia-detector:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../src:/app/src
+      - ../configs:/app/configs
+      - ../models:/app/models
+      - ../data:/app/data
+      - ../logs:/app/logs
+      - ../outputs:/app/outputs
+    environment:
+      - PYTHONPATH=/app/src
+      - MODEL_PATH=/app/models/best_model.h5
+      - CONFIG_PATH=/app/configs/default.yaml
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - mlflow
+    command: ["uvicorn", "pneumonia_detector.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  mlflow:
+    image: python:3.10-slim
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=file:///mlflow/mlruns
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    command: >
+      sh -c "
+        pip install mlflow &&
+        mlflow server 
+        --backend-store-uri file:///mlflow/mlruns 
+        --default-artifact-root /mlflow/artifacts 
+        --host 0.0.0.0 
+        --port 5000
+      "
+
+  jupyter:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../notebooks:/app/notebooks
+      - ../src:/app/src
+      - ../configs:/app/configs
+      - ../models:/app/models
+      - ../data:/app/data
+    environment:
+      - PYTHONPATH=/app/src
+    command: >
+      sh -c "
+        pip install jupyter jupyterlab &&
+        jupyter lab 
+        --ip=0.0.0.0 
+        --port=8888 
+        --no-browser 
+        --allow-root 
+        --notebook-dir=/app/notebooks
+      "
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=pneumonia_detection
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  mlflow_data:
+  postgres_data:

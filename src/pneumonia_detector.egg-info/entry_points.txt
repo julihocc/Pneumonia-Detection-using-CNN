@@ -1,0 +1,4 @@
+[console_scripts]
+pneumonia-predict = pneumonia_detector.cli:predict_cli
+pneumonia-serve = pneumonia_detector.api:serve
+pneumonia-train = pneumonia_detector.cli:train_cli

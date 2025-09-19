@@ -1,0 +1,28 @@
+# Configuration for transfer learning experiments
+data:
+  image_size: [224, 224]
+  batch_size: 16  # Smaller batch for larger models
+  
+  # More aggressive augmentation for transfer learning
+  rotation_range: 30
+  width_shift_range: 0.15
+  height_shift_range: 0.15
+  zoom_range: 0.15
+
+model:
+  use_transfer_learning: true
+  base_model: "EfficientNetB1"
+  freeze_base: false
+  fine_tune_at: 100  # Fine-tune from layer 100
+  dropout_rate: 0.3
+  l2_regularization: 0.0001
+
+training:
+  epochs: 100
+  learning_rate: 0.0001  # Lower learning rate for fine-tuning
+  early_stopping_patience: 15
+  reduce_lr_patience: 7
+
+experiment:
+  experiment_name: "pneumonia_transfer_learning"
+  run_name: "efficientnet_b1_finetune"
