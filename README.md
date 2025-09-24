@@ -43,7 +43,11 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 3. **Install dependencies**
 ```bash
 pip install -r requirements.txt
+# Editable install (requires setup.py or pyproject.toml in project root)
 pip install -e .
+
+# If you see an error, ensure that either setup.py or pyproject.toml exists in the repository root.
+# For this project, setup.py is provided in the root directory.
 ```
 
 ### Dataset Setup
@@ -181,7 +185,9 @@ model:
   
 training:
   epochs: 50
-  learning_rate: 0.001
+Create custom configurations for different experiments:
+
+To generate a YAML configuration template (based on `configs/default.yaml`) for your own experiments, use:
   optimizer: "adam"
 ```
 
@@ -246,15 +252,15 @@ kubectl apply -f k8s/deployment.yaml
 ### Cloud Platforms
 - **AWS**: ECS, EKS, or Lambda with container images
 - **GCP**: Cloud Run, GKE, or Vertex AI
-- **Azure**: Container Instances, AKS, or ML endpoints
-
 ## 📊 Performance Metrics
 
-The refactored system achieves:
+The refactored system achieves (using `configs/default.yaml` on the original Kaggle chest X-ray dataset):
 
-- **Accuracy**: 92.6%+ (matching original performance)
+- **Accuracy**: 92.6%+ (on `data/chest_xray/test` with `configs/default.yaml`)
 - **Training Speed**: 50% faster with tf.data pipeline
 - **Memory Usage**: 30% reduction with efficient data loading
+- **API Response**: <200ms average inference time
+- **Throughput**: 100+ predictions/second (batch mode)
 - **API Response**: <200ms average inference time
 - **Throughput**: 100+ predictions/second (batch mode)
 
@@ -291,8 +297,8 @@ pneumonia/
 ├── configs/                         # Configuration files
 ├── docker/                          # Docker configurations
 ├── notebooks/                       # Jupyter notebooks
-├── docs/                           # Documentation
-└── scripts/                        # Utility scripts
+│   ├── docs/                        # Documentation
+├── scripts/                        # Utility scripts
 ```
 
 ## 🤝 Contributing
