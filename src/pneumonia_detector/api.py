@@ -43,7 +43,7 @@ class HealthResponse(BaseModel):
 app = FastAPI(
     title="Pneumonia Detection API",
     description="REST API for chest X-ray pneumonia detection using deep learning",
-    version="2.0.0"
+    version="2.1.0"
 )
 
 # CORS middleware
@@ -92,7 +92,7 @@ async def health_check():
     return HealthResponse(
         status="healthy" if predictor is not None else "maintenance",
         model_loaded=predictor is not None,
-        version="2.0.0"
+    version="2.1.0"
     )
 
 
@@ -223,7 +223,7 @@ async def root():
     """Root endpoint with API information"""
     return {
         "message": "Pneumonia Detection API",
-        "version": "2.0.0",
+    "version": "2.1.0",
         "docs": "/docs",
         "health": "/health"
     }
