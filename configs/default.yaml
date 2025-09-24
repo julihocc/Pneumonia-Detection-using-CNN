@@ -25,7 +25,7 @@ model:
   
   # Transfer learning
   use_transfer_learning: true
-  base_model: "EfficientNetB0"  # Options: EfficientNetB0, ResNet50, VGG16, etc.
+  base_model: "ResNet50"  # Options: EfficientNetB0, ResNet50, VGG16, etc.
   freeze_base: true
   fine_tune_at: null
 

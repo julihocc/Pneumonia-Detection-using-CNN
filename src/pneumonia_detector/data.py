@@ -40,13 +40,18 @@ class DataPipeline:
         # Normalize pixel values to [0, 1]
         image = tf.cast(image, tf.float32) / 255.0
         
-        # Convert to grayscale if needed (original dataset is grayscale)
-        if tf.shape(image)[-1] == 3:
-            image = tf.image.rgb_to_grayscale(image)
-            
-        # Ensure 3 channels for transfer learning models
-        if self.config.image_size == (224, 224):  # Assuming transfer learning
+        # For transfer learning models, we need 3 channels
+        # If image is grayscale, convert to RGB by duplicating channels
+        if tf.shape(image)[-1] == 1:
             image = tf.image.grayscale_to_rgb(image)
+        elif tf.shape(image)[-1] == 3:
+            # Keep as RGB
+            pass
+        else:
+            # Handle other cases by ensuring 3 channels
+            if len(image.shape) == 2:  # 2D grayscale
+                image = tf.expand_dims(image, -1)  # Add channel dimension
+                image = tf.image.grayscale_to_rgb(image)
             
         return image, label
     

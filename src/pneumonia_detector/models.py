@@ -189,7 +189,13 @@ class ModelFactory:
         model = model_builder.build_model()
         
         logger.info(f"Created model with {model.count_params():,} parameters")
-        logger.info(f"Trainable parameters: {sum(tf.keras.utils.count_params(w) for w in model.trainable_weights):,}")
+        try:
+            # Try new API first  
+            trainable_params = sum(w.shape.num_elements() for w in model.trainable_weights)
+        except AttributeError:
+            # Fallback for older TensorFlow versions
+            trainable_params = sum(tf.size(w).numpy() for w in model.trainable_weights)
+        logger.info(f"Trainable parameters: {trainable_params:,}")
         
         return model
 

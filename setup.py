@@ -11,11 +11,17 @@ def read_readme():
 # Read requirements
 def read_requirements(filename):
     with open(filename, "r", encoding="utf-8") as fh:
-        return [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+        requirements = []
+        for line in fh:
+            line = line.strip()
+            # Skip empty lines, comments, and -r includes
+            if line and not line.startswith("#") and not line.startswith("-r"):
+                requirements.append(line)
+        return requirements
 
 setup(
     name="pneumonia-detector",
-    version="2.0.0",
+    version="2.1.0",
     author="Pneumonia Detection Team",
     author_email="contact@pneumonia-detector.com",
     description="Modern CNN-based pneumonia detection from chest X-rays",
