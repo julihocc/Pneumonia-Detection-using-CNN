@@ -21,7 +21,7 @@ def read_requirements(filename):
 
 setup(
     name="pneumonia-detector",
-    version="2.0.0",
+    version="2.1.0",
     author="Pneumonia Detection Team",
     author_email="contact@pneumonia-detector.com",
     description="Modern CNN-based pneumonia detection from chest X-rays",
