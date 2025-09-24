@@ -136,6 +136,10 @@ datasets/
 *.hdf5
 *.pkl
 *.pickle
+outputs/
+
+# Local session context file
+.context
 
 # Machine Learning models
 models/
